@@ -20,6 +20,9 @@ import {
 
 import { useAuth0 } from "@auth0/auth0-react";
 
+import { Dropdown, Selection } from 'react-dropdown-now';
+import 'react-dropdown-now/style.css';
+
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const {
@@ -36,7 +39,7 @@ const NavBar = () => {
           returnTo: window.location.origin,
         }
     });
-
+  let organization = "";
   return (
     <div className="nav-container">
       <Navbar color="light" light expand="md" container={false}>
@@ -75,10 +78,21 @@ const NavBar = () => {
                     id="qsLoginBtn"
                     color="primary"
                     className="btn-margin"
-                    onClick={() => loginWithRedirect()}
+                    onClick={() => loginWithRedirect({authorizationParams:{organization:organization}})}
                   >
                     Log in
                   </Button>
+
+                  <Dropdown
+                      placeholder="Select an option"
+                      options={[{'label':'Organization A','value':'org_8MQIffCdP0TpeP0S'}, {'label':'Organization B','value':'org_2r9t9SABiEOf8Lw2'}]}
+                      value="one"
+                      onChange={(value) => console.log('onChange!', value)}
+                      onSelect={(value) => organization = value.value} // always fires once a selection happens even if there is no change
+                      onClose={(closedBySelection) => console.log('closedBySelection?:', closedBySelection)}
+                      onOpen={() => console.log('open!')}
+                  />   
+
                 </NavItem>
               )}
               {isAuthenticated && (
